@@ -25,13 +25,12 @@ public class BusyKitchenMain {
 
         System.out.println("=== BusyKitchen 開店 ===");
 
-        orderQueue.put(new Order(1, "ラーメン", 5000));
-        orderQueue.put(new Order(2, "餃子", 2000));
-        orderQueue.put(new Order(3, "チャーハン", 3000));
-        orderQueue.put(new Order(4, "カレー", 4000));
-        orderQueue.put(new Order(5, "うどん", 2500));
+        orderQueue.put(new Order(1, MenuItem.RAMEN));
+        orderQueue.put(new Order(2, MenuItem.GYOZA));
+        orderQueue.put(new Order(3, MenuItem.FRIED_RICE));
+        orderQueue.put(new Order(4, MenuItem.CURRY));
+        orderQueue.put(new Order(5, MenuItem.UDON));
 
-        // コック2人分の終了シグナルを入れる。
         orderQueue.put(Order.createEndSignal());
         orderQueue.put(Order.createEndSignal());
 

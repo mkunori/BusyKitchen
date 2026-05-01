@@ -1,18 +1,19 @@
 /**
- * 1件の注文を表すレコードクラス
- * 
- * @param orderNo        注文番号
- * @param dishName       料理名
- * @param cookTimeMillis 調理時間（ミリ秒）
+ * 1件の注文を表すレコードです。
+ *
+ * @param orderNo  注文番号
+ * @param menuItem 注文されたメニュー
  */
-public record Order(int orderNo, String dishName, int cookTimeMillis) {
+public record Order(int orderNo, MenuItem menuItem) {
 
-    /** 終了シグナル用の注文番号 */
+    /**
+     * 終了シグナル用の注文番号です。
+     */
     public static final int END_ORDER_NO = -1;
 
     /**
-     * この注文が終了シグナルかどうかを返す。
-     * 
+     * この注文が終了シグナルかどうかを返します。
+     *
      * @return 終了シグナルなら true
      */
     public boolean isEndSignal() {
@@ -20,11 +21,11 @@ public record Order(int orderNo, String dishName, int cookTimeMillis) {
     }
 
     /**
-     * 終了シグナル用の注文を生成する。
-     * 
+     * 終了シグナル用の注文を作成します。
+     *
      * @return 終了シグナル用の注文
      */
     public static Order createEndSignal() {
-        return new Order(END_ORDER_NO, "END", 0);
+        return new Order(END_ORDER_NO, MenuItem.END);
     }
 }
