@@ -20,11 +20,13 @@ Javaのマルチスレッド学習として作成しました。
 - ランダムな注文生成
 - コックの状態管理（WAITING / COOKING / STOPPED）
 - ログ出力の分離（KitchenLogger）
+- キッチン状態のリアルタイムモニタリング（KitchenMonitor）
 
 ## マルチスレッド要素
 - 生産者（Customer）と消費者（Cook）の分離
 - BlockingQueue による安全なデータ共有
 - Future.get() による処理完了待ち
+- 複数スレッドからの状態参照（volatile）
 - 終了シグナルによるスレッド停止
 
 ## クラス構成
@@ -60,8 +62,22 @@ Javaのマルチスレッド学習として作成しました。
 - STOPPED
 
 ### `KitchenLogger`
-ログ出力を担当するクラスです。  
-現在はコンソール出力ですが、将来的にGUIへ拡張可能です。
+ログ出力を担当するインターフェースです。  
+
+### `ConsoleKitchenLogger`
+CUIログ出力を担当するクラスです。 
+
+### `CookSnapshot` (record)
+コック1人分の状態をまとめたデータです。  
+コック名、状態、現在の注文を保持します。
+
+### `KitchenSnapshot` (record)
+キッチン全体の状態をまとめたデータです。  
+複数のコック状態を一覧として保持します。
+
+### `KitchenMonitor`
+キッチンの状態を定期的に監視・表示するクラスです。  
+CUIでリアルタイムにコックの状態を確認できます。
 
 
 ## 実行例
@@ -82,6 +98,7 @@ Cook-B が調理完了: 注文2 餃子
 - `OrderQueue` によりドメインオブジェクトとして責務を明確化
 - ログ処理を `KitchenLogger` に集約し、UI変更に対応しやすい設計
 - `ExecutorService` によるスレッド管理
+- Snapshotパターンにより状態取得と表示処理を分離
 
 ## 今後の案（仮）
 - GUIによるレストランモニタリング画面の実装
@@ -90,3 +107,4 @@ Cook-B が調理完了: 注文2 餃子
 - メニュー在庫管理
 - Observer パターンの導入
 - ExecutorService の設定最適化
+- GUIと連携したSnapshot表示
