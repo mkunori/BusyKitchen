@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -17,38 +19,46 @@ public class BusyKitchenMain {
     public static void main(String[] args) throws InterruptedException {
         BlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
 
-        Thread cook1 = new Thread(new Cook("Cook-A", orderQueue));
-        Thread cook2 = new Thread(new Cook("Cook-B", orderQueue));
+        List<Thread> cooks = List.of(
+                new Thread(new Cook("Cook-A", orderQueue)),
+                new Thread(new Cook("Cook-B", orderQueue)));
 
-        cook1.start();
-        cook2.start();
+        List<Order> orders = List.of(
+                new Order(1, MenuItem.RAMEN),
+                new Order(2, MenuItem.GYOZA),
+                new Order(3, MenuItem.FRIED_RICE),
+                new Order(4, MenuItem.CURRY),
+                new Order(5, MenuItem.UDON));
+
+        List<Thread> customers = new ArrayList<>();
+
+        for (int i = 0; i < orders.size(); i++) {
+            String customerName = "Customer-" + (i + 1);
+            customers.add(new Thread(new Customer(customerName, orderQueue, orders.get(i))));
+        }
 
         System.out.println("=== BusyKitchen 開店 ===");
 
-        Thread customer1 = new Thread(new Customer("Customer-1", orderQueue, new Order(1, MenuItem.RAMEN)));
-        Thread customer2 = new Thread(new Customer("Customer-2", orderQueue, new Order(2, MenuItem.GYOZA)));
-        Thread customer3 = new Thread(new Customer("Customer-3", orderQueue, new Order(3, MenuItem.FRIED_RICE)));
-        Thread customer4 = new Thread(new Customer("Customer-4", orderQueue, new Order(4, MenuItem.CURRY)));
-        Thread customer5 = new Thread(new Customer("Customer-5", orderQueue, new Order(5, MenuItem.UDON)));
+        for (Thread cook : cooks) {
+            cook.start();
+        }
 
-        customer1.start();
-        customer2.start();
-        customer3.start();
-        customer4.start();
-        customer5.start();
+        for (Thread customer : customers) {
+            customer.start();
+        }
 
-        customer1.join();
-        customer2.join();
-        customer3.join();
-        customer4.join();
-        customer5.join();
+        for (Thread customer : customers) {
+            customer.join();
+        }
 
-        // コック2人分の終了シグナルを入れる
-        orderQueue.put(Order.createEndSignal());
-        orderQueue.put(Order.createEndSignal());
+        // コックの人数分だけ終了シグナルを入れる
+        for (int i = 0; i < cooks.size(); i++) {
+            orderQueue.put(Order.createEndSignal());
+        }
 
-        cook1.join();
-        cook2.join();
+        for (Thread cook : cooks) {
+            cook.join();
+        }
 
         System.out.println("=== BusyKitchen 閉店 ===");
     }
