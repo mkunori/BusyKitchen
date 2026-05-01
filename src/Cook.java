@@ -8,6 +8,7 @@ public class Cook implements Runnable {
 
     private final String cookName;
     private final OrderQueue orderQueue;
+    private final KitchenLogger logger;
     private volatile CookStatus status = CookStatus.WAITING;
 
     /**
@@ -15,10 +16,12 @@ public class Cook implements Runnable {
      *
      * @param cookName   コック名
      * @param orderQueue 注文キュー
+     * @param logger     ロガー
      */
-    public Cook(String cookName, OrderQueue orderQueue) {
+    public Cook(String cookName, OrderQueue orderQueue, KitchenLogger logger) {
         this.cookName = cookName;
         this.orderQueue = orderQueue;
+        this.logger = logger;
     }
 
     @Override
@@ -30,25 +33,25 @@ public class Cook implements Runnable {
 
                 if (order.isEndSignal()) {
                     status = CookStatus.STOPPED;
-                    System.out.println(cookName + " は営業終了します。");
+                    logger.log(cookName + " は営業終了します。");
                     break;
                 }
 
                 status = CookStatus.COOKING;
 
-                System.out.println(cookName + " が調理開始: "
+                logger.log(cookName + " が調理開始: "
                         + "注文" + order.orderNo() + " "
                         + order.menuItem().getDisplayName());
 
                 Thread.sleep(order.menuItem().getCookTimeMillis());
 
-                System.out.println(cookName + " が調理完了: "
+                logger.log(cookName + " が調理完了: "
                         + "注文" + order.orderNo() + " "
                         + order.menuItem().getDisplayName());
             }
         } catch (InterruptedException e) {
             status = CookStatus.STOPPED;
-            System.out.println(cookName + " の調理が中断されました。");
+            logger.log(cookName + " の調理が中断されました。");
             Thread.currentThread().interrupt();
         }
     }

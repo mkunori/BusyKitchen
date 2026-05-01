@@ -21,20 +21,22 @@ public class BusyKitchenMain {
      * @throws ExecutionException   お客さんスレッドで例外が発生した場合
      */
     public static void main(String[] args) throws InterruptedException, ExecutionException {
+        KitchenLogger logger = new KitchenLogger();
+
         OrderQueue orderQueue = new OrderQueue();
 
         List<Cook> cooks = List.of(
-                new Cook("Cook-A", orderQueue),
-                new Cook("Cook-B", orderQueue));
+                new Cook("Cook-A", orderQueue, logger),
+                new Cook("Cook-B", orderQueue, logger));
 
         List<Order> orders = createRandomOrders(10);
 
-        List<Customer> customers = createCustomers(orders, orderQueue);
+        List<Customer> customers = createCustomers(orders, orderQueue, logger);
 
         int threadPoolSize = cooks.size() + customers.size();
         ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize);
 
-        System.out.println("=== BusyKitchen 開店 ===");
+        logger.log("=== BusyKitchen 開店 ===");
 
         for (Cook cook : cooks) {
             executor.submit(cook);
@@ -62,7 +64,7 @@ public class BusyKitchenMain {
             executor.shutdownNow();
         }
 
-        System.out.println("=== BusyKitchen 閉店 ===");
+        logger.log("=== BusyKitchen 閉店 ===");
     }
 
     /**
@@ -70,14 +72,17 @@ public class BusyKitchenMain {
      *
      * @param orders     注文リスト
      * @param orderQueue 注文キュー
+     * @param logger     ロガー
      * @return お客さんのリスト
      */
-    private static List<Customer> createCustomers(List<Order> orders, OrderQueue orderQueue) {
+    private static List<Customer> createCustomers(
+            List<Order> orders, OrderQueue orderQueue, KitchenLogger logger) {
         return orders.stream()
                 .map(order -> new Customer(
                         "Customer-" + order.orderNo(),
                         orderQueue,
-                        order))
+                        order,
+                        logger))
                 .toList();
     }
 
