@@ -89,4 +89,13 @@ public class Cook implements Runnable {
     public Order getCurrentOrder() {
         return currentOrder;
     }
+
+    /**
+     * 現在の状態をスナップショットとして取得します。
+     *
+     * @return コックスナップショット
+     */
+    public CookSnapshot snapshot() {
+        return new CookSnapshot(cookName, status, currentOrder);
+    }
 }

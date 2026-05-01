@@ -52,16 +52,16 @@ public class KitchenMonitor implements Runnable {
         logger.log("----- Kitchen Monitor -----");
 
         for (Cook cook : cooks) {
-            Order currentOrder = cook.getCurrentOrder();
+            CookSnapshot snapshot = cook.snapshot();
 
-            if (currentOrder == null) {
-                logger.log(cook.getCookName() + " : " + cook.getStatus());
+            if (snapshot.currentOrder() == null) {
+                logger.log(snapshot.cookName() + " : " + snapshot.status());
             } else {
-                logger.log(cook.getCookName() + " : "
-                        + cook.getStatus()
-                        + " / 注文" + currentOrder.orderNo()
+                logger.log(snapshot.cookName() + " : "
+                        + snapshot.status()
+                        + " / 注文" + snapshot.currentOrder().orderNo()
                         + " "
-                        + currentOrder.menuItem().getDisplayName());
+                        + snapshot.currentOrder().menuItem().getDisplayName());
             }
         }
     }
