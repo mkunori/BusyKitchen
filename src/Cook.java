@@ -8,6 +8,7 @@ public class Cook implements Runnable {
 
     private final String cookName;
     private final OrderQueue orderQueue;
+    private volatile CookStatus status = CookStatus.WAITING;
 
     /**
      * コックを作成します。
@@ -24,28 +25,49 @@ public class Cook implements Runnable {
     public void run() {
         try {
             while (true) {
+                status = CookStatus.WAITING;
                 Order order = orderQueue.takeOrder();
 
                 if (order.isEndSignal()) {
+                    status = CookStatus.STOPPED;
                     System.out.println(cookName + " は営業終了します。");
                     break;
                 }
 
-                MenuItem menuItem = order.menuItem();
+                status = CookStatus.COOKING;
 
                 System.out.println(cookName + " が調理開始: "
                         + "注文" + order.orderNo() + " "
-                        + menuItem.getDisplayName());
+                        + order.menuItem().getDisplayName());
 
-                Thread.sleep(menuItem.getCookTimeMillis());
+                Thread.sleep(order.menuItem().getCookTimeMillis());
 
                 System.out.println(cookName + " が調理完了: "
                         + "注文" + order.orderNo() + " "
-                        + menuItem.getDisplayName());
+                        + order.menuItem().getDisplayName());
             }
         } catch (InterruptedException e) {
+            status = CookStatus.STOPPED;
             System.out.println(cookName + " の調理が中断されました。");
             Thread.currentThread().interrupt();
         }
+    }
+
+    /**
+     * コック名を返します。
+     *
+     * @return コック名
+     */
+    public String getCookName() {
+        return cookName;
+    }
+
+    /**
+     * 現在の状態を返します。
+     *
+     * @return コックの現在状態
+     */
+    public CookStatus getStatus() {
+        return status;
     }
 }
