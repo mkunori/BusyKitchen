@@ -21,7 +21,7 @@ public class BusyKitchenMain {
      * @throws ExecutionException   お客さんスレッドで例外が発生した場合
      */
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        KitchenLogger logger = new KitchenLogger();
+        KitchenLogger logger = new ConsoleKitchenLogger();
 
         OrderQueue orderQueue = new OrderQueue();
 

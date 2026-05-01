@@ -1,17 +1,14 @@
 /**
- * BusyKitchen のログ出力を担当するクラスです。
+ * BusyKitchen のログ出力を表すインターフェースです。
  *
- * 現在はコンソールへ出力します。
- * 将来的には GUI のログ表示へ差し替えることも想定しています。
+ * 出力先をコンソールやGUIなどに切り替えられるようにします。
  */
-public class KitchenLogger {
+public interface KitchenLogger {
 
     /**
      * メッセージをログとして出力します。
      *
      * @param message 出力するメッセージ
      */
-    public void log(String message) {
-        System.out.println(message);
-    }
+    void log(String message);
 }
