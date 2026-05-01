@@ -1,5 +1,3 @@
-import java.util.concurrent.BlockingQueue;
-
 /**
  * お客さんを表すクラスです。
  *
@@ -8,7 +6,7 @@ import java.util.concurrent.BlockingQueue;
 public class Customer implements Runnable {
 
     private final String customerName;
-    private final BlockingQueue<Order> orderQueue;
+    private final OrderQueue orderQueue;
     private final Order order;
 
     /**
@@ -18,7 +16,7 @@ public class Customer implements Runnable {
      * @param orderQueue   注文キュー
      * @param order        注文する内容
      */
-    public Customer(String customerName, BlockingQueue<Order> orderQueue, Order order) {
+    public Customer(String customerName, OrderQueue orderQueue, Order order) {
         this.customerName = customerName;
         this.orderQueue = orderQueue;
         this.order = order;
@@ -31,7 +29,7 @@ public class Customer implements Runnable {
                     + "注文" + order.orderNo() + " "
                     + order.menuItem().getDisplayName());
 
-            orderQueue.put(order);
+            orderQueue.addOrder(order);
         } catch (InterruptedException e) {
             System.out.println(customerName + " の注文が中断されました。");
             Thread.currentThread().interrupt();

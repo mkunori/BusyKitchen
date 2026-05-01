@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * BusyKitchen の起動クラスです。
@@ -17,7 +15,7 @@ public class BusyKitchenMain {
      * @throws InterruptedException スレッド待機中に割り込まれた場合
      */
     public static void main(String[] args) throws InterruptedException {
-        BlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
+        OrderQueue orderQueue = new OrderQueue();
 
         List<Thread> cooks = List.of(
                 new Thread(new Cook("Cook-A", orderQueue)),
@@ -47,7 +45,7 @@ public class BusyKitchenMain {
         }
 
         for (int i = 0; i < cooks.size(); i++) {
-            orderQueue.put(Order.createEndSignal());
+            orderQueue.addOrder(Order.createEndSignal());
         }
 
         for (Thread cook : cooks) {
@@ -65,7 +63,7 @@ public class BusyKitchenMain {
      * @return お客さんスレッドのリスト
      */
     private static List<Thread> createCustomerThreads(
-            List<Order> orders, BlockingQueue<Order> orderQueue) {
+            List<Order> orders, OrderQueue orderQueue) {
         List<Thread> customers = new ArrayList<>();
 
         for (int i = 0; i < orders.size(); i++) {

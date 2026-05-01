@@ -1,5 +1,3 @@
-import java.util.concurrent.BlockingQueue;
-
 /**
  * コックを表すクラスです。
  *
@@ -9,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
 public class Cook implements Runnable {
 
     private final String cookName;
-    private final BlockingQueue<Order> orderQueue;
+    private final OrderQueue orderQueue;
 
     /**
      * コックを作成します。
@@ -17,7 +15,7 @@ public class Cook implements Runnable {
      * @param cookName   コック名
      * @param orderQueue 注文キュー
      */
-    public Cook(String cookName, BlockingQueue<Order> orderQueue) {
+    public Cook(String cookName, OrderQueue orderQueue) {
         this.cookName = cookName;
         this.orderQueue = orderQueue;
     }
@@ -26,7 +24,7 @@ public class Cook implements Runnable {
     public void run() {
         try {
             while (true) {
-                Order order = orderQueue.take();
+                Order order = orderQueue.takeOrder();
 
                 if (order.isEndSignal()) {
                     System.out.println(cookName + " は営業終了します。");
