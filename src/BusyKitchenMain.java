@@ -30,12 +30,7 @@ public class BusyKitchenMain {
                 new Order(4, MenuItem.CURRY),
                 new Order(5, MenuItem.UDON));
 
-        List<Thread> customers = new ArrayList<>();
-
-        for (int i = 0; i < orders.size(); i++) {
-            String customerName = "Customer-" + (i + 1);
-            customers.add(new Thread(new Customer(customerName, orderQueue, orders.get(i))));
-        }
+        List<Thread> customers = createCustomerThreads(orders, orderQueue);
 
         System.out.println("=== BusyKitchen 開店 ===");
 
@@ -51,7 +46,6 @@ public class BusyKitchenMain {
             customer.join();
         }
 
-        // コックの人数分だけ終了シグナルを入れる
         for (int i = 0; i < cooks.size(); i++) {
             orderQueue.put(Order.createEndSignal());
         }
@@ -61,5 +55,24 @@ public class BusyKitchenMain {
         }
 
         System.out.println("=== BusyKitchen 閉店 ===");
+    }
+
+    /**
+     * 注文リストからお客さんスレッドのリストを作成します。
+     *
+     * @param orders     注文リスト
+     * @param orderQueue 注文キュー
+     * @return お客さんスレッドのリスト
+     */
+    private static List<Thread> createCustomerThreads(
+            List<Order> orders, BlockingQueue<Order> orderQueue) {
+        List<Thread> customers = new ArrayList<>();
+
+        for (int i = 0; i < orders.size(); i++) {
+            String customerName = "Customer-" + (i + 1);
+            customers.add(new Thread(new Customer(customerName, orderQueue, orders.get(i))));
+        }
+
+        return customers;
     }
 }
