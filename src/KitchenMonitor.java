@@ -49,20 +49,35 @@ public class KitchenMonitor implements Runnable {
      * 現在のコック状態を表示します。
      */
     private void printStatus() {
+        KitchenSnapshot kitchenSnapshot = snapshot();
+
         logger.log("----- Kitchen Monitor -----");
 
-        for (Cook cook : cooks) {
-            CookSnapshot snapshot = cook.snapshot();
+        for (CookSnapshot cookSnapshot : kitchenSnapshot.cookSnapshots()) {
+            Order currentOrder = cookSnapshot.currentOrder();
 
-            if (snapshot.currentOrder() == null) {
-                logger.log(snapshot.cookName() + " : " + snapshot.status());
+            if (currentOrder == null) {
+                logger.log(cookSnapshot.cookName() + " : " + cookSnapshot.status());
             } else {
-                logger.log(snapshot.cookName() + " : "
-                        + snapshot.status()
-                        + " / 注文" + snapshot.currentOrder().orderNo()
+                logger.log(cookSnapshot.cookName() + " : "
+                        + cookSnapshot.status()
+                        + " / 注文" + currentOrder.orderNo()
                         + " "
-                        + snapshot.currentOrder().menuItem().getDisplayName());
+                        + currentOrder.menuItem().getDisplayName());
             }
         }
+    }
+
+    /**
+     * 現在のキッチン状態をスナップショットとして取得します。
+     *
+     * @return キッチン全体の状態スナップショット
+     */
+    private KitchenSnapshot snapshot() {
+        List<CookSnapshot> cookSnapshots = cooks.stream()
+                .map(Cook::snapshot)
+                .toList();
+
+        return new KitchenSnapshot(cookSnapshots);
     }
 }
