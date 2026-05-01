@@ -36,7 +36,12 @@ public class BusyKitchenMain {
         int threadPoolSize = cooks.size() + customers.size();
         ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize);
 
+        KitchenMonitor monitor = new KitchenMonitor(cooks, logger);
+        Thread monitorThread = new Thread(monitor, "KitchenMonitor");
+
         logger.log("=== BusyKitchen 開店 ===");
+
+        monitorThread.start();
 
         for (Cook cook : cooks) {
             executor.submit(cook);
@@ -49,7 +54,6 @@ public class BusyKitchenMain {
             customerFutures.add(future);
         }
 
-        // 全てのお客さんが注文し終わるまで待つ
         for (Future<?> future : customerFutures) {
             future.get();
         }
@@ -63,6 +67,10 @@ public class BusyKitchenMain {
         if (!executor.awaitTermination(1, TimeUnit.MINUTES)) {
             executor.shutdownNow();
         }
+
+        monitor.stop();
+        monitorThread.interrupt();
+        monitorThread.join();
 
         logger.log("=== BusyKitchen 閉店 ===");
     }

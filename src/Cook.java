@@ -10,6 +10,7 @@ public class Cook implements Runnable {
     private final OrderQueue orderQueue;
     private final KitchenLogger logger;
     private volatile CookStatus status = CookStatus.WAITING;
+    private volatile Order currentOrder;
 
     /**
      * コックを作成します。
@@ -33,11 +34,13 @@ public class Cook implements Runnable {
 
                 if (order.isEndSignal()) {
                     status = CookStatus.STOPPED;
+                    currentOrder = null;
                     logger.log(cookName + " は営業終了します。");
                     break;
                 }
 
                 status = CookStatus.COOKING;
+                currentOrder = order;
 
                 logger.log(cookName + " が調理開始: "
                         + "注文" + order.orderNo() + " "
@@ -48,6 +51,8 @@ public class Cook implements Runnable {
                 logger.log(cookName + " が調理完了: "
                         + "注文" + order.orderNo() + " "
                         + order.menuItem().getDisplayName());
+
+                currentOrder = null;
             }
         } catch (InterruptedException e) {
             status = CookStatus.STOPPED;
@@ -72,5 +77,16 @@ public class Cook implements Runnable {
      */
     public CookStatus getStatus() {
         return status;
+    }
+
+    /**
+     * 現在調理中の注文を返します。
+     *
+     * 調理中でない場合は null を返します。
+     *
+     * @return 現在調理中の注文
+     */
+    public Order getCurrentOrder() {
+        return currentOrder;
     }
 }
