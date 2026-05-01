@@ -27,12 +27,7 @@ public class BusyKitchenMain {
                 new Cook("Cook-A", orderQueue),
                 new Cook("Cook-B", orderQueue));
 
-        List<Order> orders = List.of(
-                new Order(1, MenuItem.RAMEN),
-                new Order(2, MenuItem.GYOZA),
-                new Order(3, MenuItem.FRIED_RICE),
-                new Order(4, MenuItem.CURRY),
-                new Order(5, MenuItem.UDON));
+        List<Order> orders = createRandomOrders(10);
 
         List<Customer> customers = createCustomers(orders, orderQueue);
 
@@ -84,5 +79,21 @@ public class BusyKitchenMain {
                         orderQueue,
                         order))
                 .toList();
+    }
+
+    /**
+     * 指定された件数のランダム注文を作成します。
+     *
+     * @param orderCount 作成する注文数
+     * @return ランダム注文のリスト
+     */
+    private static List<Order> createRandomOrders(int orderCount) {
+        List<Order> orders = new ArrayList<>();
+
+        for (int i = 1; i <= orderCount; i++) {
+            orders.add(new Order(i, MenuItem.randomItem()));
+        }
+
+        return orders;
     }
 }
