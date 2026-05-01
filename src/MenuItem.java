@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * BusyKitchen で扱うメニューを表す列挙型です。
@@ -11,7 +11,13 @@ public enum MenuItem {
     UDON("うどん", 2500),
     END("END", 0);
 
-    private static final Random RANDOM = new Random();
+    private static final MenuItem[] NORMAL_ITEMS = {
+            RAMEN,
+            GYOZA,
+            FRIED_RICE,
+            CURRY,
+            UDON
+    };
 
     private final String displayName;
     private final int cookTimeMillis;
@@ -37,14 +43,6 @@ public enum MenuItem {
      * @return ランダムな通常メニュー
      */
     public static MenuItem randomItem() {
-        MenuItem[] normalItems = {
-                RAMEN,
-                GYOZA,
-                FRIED_RICE,
-                CURRY,
-                UDON
-        };
-
-        return normalItems[RANDOM.nextInt(normalItems.length)];
+        return NORMAL_ITEMS[ThreadLocalRandom.current().nextInt(NORMAL_ITEMS.length)];
     }
 }
