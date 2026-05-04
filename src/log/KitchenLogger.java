@@ -1,3 +1,5 @@
+package log;
+
 /**
  * BusyKitchen のログ出力を表すインターフェースです。
  *

@@ -1,3 +1,8 @@
+package kitchen;
+
+import domain.Order;
+import log.KitchenLogger;
+
 /**
  * お客さんを表すクラスです。
  *

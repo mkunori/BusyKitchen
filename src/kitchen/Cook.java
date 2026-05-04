@@ -1,3 +1,10 @@
+package kitchen;
+
+import domain.CookStatus;
+import domain.Order;
+import log.KitchenLogger;
+import snapshot.CookSnapshot;
+
 /**
  * コックを表すクラスです。
  *

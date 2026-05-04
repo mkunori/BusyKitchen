@@ -1,6 +1,12 @@
+package gui;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+
+import domain.Order;
+import snapshot.CookSnapshot;
+import snapshot.KitchenSnapshot;
 
 /**
  * キッチン状態を JTable に表示するためのテーブルモデルです。

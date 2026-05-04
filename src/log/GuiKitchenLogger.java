@@ -1,3 +1,5 @@
+package log;
+
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 

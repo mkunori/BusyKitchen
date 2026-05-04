@@ -1,3 +1,8 @@
+package snapshot;
+
+import domain.CookStatus;
+import domain.Order;
+
 /**
  * コックの状態スナップショットです。
  *
@@ -8,7 +13,7 @@
  * @param currentOrder 現在の注文（なければ null）
  */
 public record CookSnapshot(
-        String cookName,
-        CookStatus status,
-        Order currentOrder) {
+                String cookName,
+                CookStatus status,
+                Order currentOrder) {
 }
