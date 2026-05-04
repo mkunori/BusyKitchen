@@ -26,7 +26,15 @@ public class BusyKitchenMain {
     public static void main(String[] args)
             throws InterruptedException, ExecutionException, InvocationTargetException {
         OrderQueue orderQueue = new OrderQueue();
-        KitchenLogger logger = new ConsoleKitchenLogger();
+
+        KitchenTableModel tableModel = new KitchenTableModel();
+        BusyKitchenFrame frame = new BusyKitchenFrame(tableModel);
+
+        SwingUtilities.invokeAndWait(() -> frame.setVisible(true));
+
+        KitchenLogger logger = new CompositeKitchenLogger(
+                new ConsoleKitchenLogger(),
+                new GuiKitchenLogger(frame.getLogArea()));
 
         List<Cook> cooks = List.of(
                 new Cook("Cook-A", orderQueue, logger),
@@ -34,11 +42,6 @@ public class BusyKitchenMain {
 
         List<Order> orders = createRandomOrders(10);
         List<Customer> customers = createCustomers(orders, orderQueue, logger);
-
-        KitchenTableModel tableModel = new KitchenTableModel();
-        BusyKitchenFrame frame = new BusyKitchenFrame(tableModel);
-
-        SwingUtilities.invokeAndWait(() -> frame.setVisible(true));
 
         GuiKitchenMonitor guiMonitor = new GuiKitchenMonitor(cooks, frame);
         Thread guiMonitorThread = new Thread(guiMonitor, "GuiKitchenMonitor");
