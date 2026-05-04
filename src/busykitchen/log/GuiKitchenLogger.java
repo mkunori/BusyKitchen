@@ -1,4 +1,4 @@
-package log;
+package busykitchen.log;
 
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;

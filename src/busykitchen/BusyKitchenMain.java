@@ -1,3 +1,5 @@
+package busykitchen;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,18 +10,18 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
 
-import domain.MenuItem;
-import domain.Order;
-import gui.BusyKitchenFrame;
-import gui.KitchenTableModel;
-import kitchen.Cook;
-import kitchen.Customer;
-import kitchen.OrderQueue;
-import log.CompositeKitchenLogger;
-import log.ConsoleKitchenLogger;
-import log.GuiKitchenLogger;
-import log.KitchenLogger;
-import monitor.GuiKitchenMonitor;
+import busykitchen.domain.MenuItem;
+import busykitchen.domain.Order;
+import busykitchen.gui.BusyKitchenFrame;
+import busykitchen.gui.KitchenTableModel;
+import busykitchen.kitchen.Cook;
+import busykitchen.kitchen.Customer;
+import busykitchen.kitchen.OrderQueue;
+import busykitchen.log.CompositeKitchenLogger;
+import busykitchen.log.ConsoleKitchenLogger;
+import busykitchen.log.GuiKitchenLogger;
+import busykitchen.log.KitchenLogger;
+import busykitchen.monitor.GuiKitchenMonitor;
 
 /**
  * BusyKitchen の起動クラスです。

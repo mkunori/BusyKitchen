@@ -1,9 +1,9 @@
-package kitchen;
+package busykitchen.kitchen;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import domain.Order;
+import busykitchen.domain.Order;
 
 /**
  * 注文を管理するキュークラスです。

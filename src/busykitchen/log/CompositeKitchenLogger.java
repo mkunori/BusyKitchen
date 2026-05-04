@@ -1,4 +1,4 @@
-package log;
+package busykitchen.log;
 
 import java.util.Arrays;
 import java.util.List;

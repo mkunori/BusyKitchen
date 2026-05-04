@@ -1,9 +1,9 @@
-package kitchen;
+package busykitchen.kitchen;
 
-import domain.CookStatus;
-import domain.Order;
-import log.KitchenLogger;
-import snapshot.CookSnapshot;
+import busykitchen.domain.CookStatus;
+import busykitchen.domain.Order;
+import busykitchen.log.KitchenLogger;
+import busykitchen.snapshot.CookSnapshot;
 
 /**
  * コックを表すクラスです。
@@ -63,6 +63,7 @@ public class Cook implements Runnable {
             }
         } catch (InterruptedException e) {
             status = CookStatus.STOPPED;
+            currentOrder = null;
             logger.log(cookName + " の調理が中断されました。");
             Thread.currentThread().interrupt();
         }

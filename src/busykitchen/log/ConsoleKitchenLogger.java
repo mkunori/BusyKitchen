@@ -1,4 +1,4 @@
-package log;
+package busykitchen.log;
 
 /**
  * コンソールへログを出力するクラスです。

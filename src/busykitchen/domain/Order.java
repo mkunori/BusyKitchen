@@ -1,4 +1,4 @@
-package domain;
+package busykitchen.domain;
 
 /**
  * 1件の注文を表すレコードです。

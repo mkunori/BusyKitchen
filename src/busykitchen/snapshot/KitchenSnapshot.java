@@ -1,4 +1,4 @@
-package snapshot;
+package busykitchen.snapshot;
 
 import java.util.List;
 
@@ -10,4 +10,8 @@ import java.util.List;
  * @param cookSnapshots コック状態の一覧
  */
 public record KitchenSnapshot(List<CookSnapshot> cookSnapshots) {
+
+    public KitchenSnapshot {
+        cookSnapshots = List.copyOf(cookSnapshots);
+    }
 }

@@ -1,11 +1,11 @@
-package monitor;
+package busykitchen.monitor;
 
 import java.util.List;
 
-import kitchen.Cook;
-import gui.BusyKitchenFrame;
-import snapshot.CookSnapshot;
-import snapshot.KitchenSnapshot;
+import busykitchen.kitchen.Cook;
+import busykitchen.gui.BusyKitchenFrame;
+import busykitchen.snapshot.CookSnapshot;
+import busykitchen.snapshot.KitchenSnapshot;
 
 /**
  * GUI用にキッチン状態を定期更新するモニターです。

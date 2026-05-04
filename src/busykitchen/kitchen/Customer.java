@@ -1,7 +1,7 @@
-package kitchen;
+package busykitchen.kitchen;
 
-import domain.Order;
-import log.KitchenLogger;
+import busykitchen.domain.Order;
+import busykitchen.log.KitchenLogger;
 
 /**
  * お客さんを表すクラスです。

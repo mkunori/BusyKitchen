@@ -1,12 +1,12 @@
-package gui;
+package busykitchen.gui;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-import domain.Order;
-import snapshot.CookSnapshot;
-import snapshot.KitchenSnapshot;
+import busykitchen.domain.Order;
+import busykitchen.snapshot.CookSnapshot;
+import busykitchen.snapshot.KitchenSnapshot;
 
 /**
  * キッチン状態を JTable に表示するためのテーブルモデルです。

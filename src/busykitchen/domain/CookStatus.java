@@ -1,4 +1,4 @@
-package domain;
+package busykitchen.domain;
 
 /**
  * コックの現在の状態を表す列挙型です。

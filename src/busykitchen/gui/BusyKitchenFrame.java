@@ -1,4 +1,4 @@
-package gui;
+package busykitchen.gui;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import snapshot.KitchenSnapshot;
+import busykitchen.snapshot.KitchenSnapshot;
 
 /**
  * BusyKitchen のGUI画面です。

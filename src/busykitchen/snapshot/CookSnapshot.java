@@ -1,7 +1,7 @@
-package snapshot;
+package busykitchen.snapshot;
 
-import domain.CookStatus;
-import domain.Order;
+import busykitchen.domain.CookStatus;
+import busykitchen.domain.Order;
 
 /**
  * コックの状態スナップショットです。

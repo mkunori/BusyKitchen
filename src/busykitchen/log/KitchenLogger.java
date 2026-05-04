@@ -1,4 +1,4 @@
-package log;
+package busykitchen.log;
 
 /**
  * BusyKitchen のログ出力を表すインターフェースです。
