@@ -1,3 +1,4 @@
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -5,11 +6,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import javax.swing.SwingUtilities;
 
 /**
  * BusyKitchen の起動クラスです。
  *
- * 注文キューを作成し、コックとお客さんを起動します。
+ * 注文キューを作成し、コック・お客さん・GUIモニターを起動します。
  */
 public class BusyKitchenMain {
 
@@ -17,31 +19,36 @@ public class BusyKitchenMain {
      * アプリケーションの起動点です。
      *
      * @param args コマンドライン引数
-     * @throws InterruptedException スレッド待機中に割り込まれた場合
-     * @throws ExecutionException   お客さんスレッドで例外が発生した場合
+     * @throws InterruptedException      スレッド待機中に割り込まれた場合
+     * @throws ExecutionException        別スレッドで例外が発生した場合
+     * @throws InvocationTargetException Swingの起動処理中に例外が発生した場合
      */
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        KitchenLogger logger = new ConsoleKitchenLogger();
-
+    public static void main(String[] args)
+            throws InterruptedException, ExecutionException, InvocationTargetException {
         OrderQueue orderQueue = new OrderQueue();
+        KitchenLogger logger = new ConsoleKitchenLogger();
 
         List<Cook> cooks = List.of(
                 new Cook("Cook-A", orderQueue, logger),
                 new Cook("Cook-B", orderQueue, logger));
 
         List<Order> orders = createRandomOrders(10);
-
         List<Customer> customers = createCustomers(orders, orderQueue, logger);
+
+        KitchenTableModel tableModel = new KitchenTableModel();
+        BusyKitchenFrame frame = new BusyKitchenFrame(tableModel);
+
+        SwingUtilities.invokeAndWait(() -> frame.setVisible(true));
+
+        GuiKitchenMonitor guiMonitor = new GuiKitchenMonitor(cooks, frame);
+        Thread guiMonitorThread = new Thread(guiMonitor, "GuiKitchenMonitor");
 
         int threadPoolSize = cooks.size() + customers.size();
         ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize);
 
-        KitchenMonitor monitor = new KitchenMonitor(cooks, logger);
-        Thread monitorThread = new Thread(monitor, "KitchenMonitor");
-
         logger.log("=== BusyKitchen 開店 ===");
 
-        monitorThread.start();
+        guiMonitorThread.start();
 
         for (Cook cook : cooks) {
             executor.submit(cook);
@@ -68,30 +75,11 @@ public class BusyKitchenMain {
             executor.shutdownNow();
         }
 
-        monitor.stop();
-        monitorThread.interrupt();
-        monitorThread.join();
+        guiMonitor.stop();
+        guiMonitorThread.interrupt();
+        guiMonitorThread.join();
 
         logger.log("=== BusyKitchen 閉店 ===");
-    }
-
-    /**
-     * 注文リストからお客さんのリストを作成します。
-     *
-     * @param orders     注文リスト
-     * @param orderQueue 注文キュー
-     * @param logger     ロガー
-     * @return お客さんのリスト
-     */
-    private static List<Customer> createCustomers(
-            List<Order> orders, OrderQueue orderQueue, KitchenLogger logger) {
-        return orders.stream()
-                .map(order -> new Customer(
-                        "Customer-" + order.orderNo(),
-                        orderQueue,
-                        order,
-                        logger))
-                .toList();
     }
 
     /**
@@ -108,5 +96,24 @@ public class BusyKitchenMain {
         }
 
         return orders;
+    }
+
+    /**
+     * 注文リストからお客さんのリストを作成します。
+     *
+     * @param orders     注文リスト
+     * @param orderQueue 注文キュー
+     * @param logger     ログ出力
+     * @return お客さんのリスト
+     */
+    private static List<Customer> createCustomers(
+            List<Order> orders, OrderQueue orderQueue, KitchenLogger logger) {
+        return orders.stream()
+                .map(order -> new Customer(
+                        "Customer-" + order.orderNo(),
+                        orderQueue,
+                        order,
+                        logger))
+                .toList();
     }
 }
